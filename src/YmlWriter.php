@@ -9,10 +9,9 @@ class YmlWriter
 {
     final const PROGRESS_NONE = 0;
     final const PROGRESS_STARTED = 1;
-    final const PROGRESS_CURRENCIES = 2;
-    final const PROGRESS_CATEGORIES = 3;
-    final const PROGRESS_OFFERS = 4;
-    final const PROGRESS_FINISHED = 5;
+    final const PROGRESS_CATEGORIES = 2;
+    final const PROGRESS_OFFERS = 3;
+    final const PROGRESS_FINISHED = 4;
 
     protected string $path;
 
@@ -22,8 +21,7 @@ class YmlWriter
     protected ?string $platform;
     protected ?string $agency;
     protected ?string $email;
-    protected ?string $localDeliveryCost;
-    protected array $currencies;
+    protected ?string $localDeliveryCost = null;
     protected XMLWriter $writer;
     protected int $progress;
 
@@ -38,26 +36,9 @@ class YmlWriter
         return new static();
     }
 
-    public function addCurrency(int $id, float $rate): void
-    {
-        if ($this->progress === self::PROGRESS_STARTED) {
-            $this->progress = self::PROGRESS_CURRENCIES;
-            $this->getWriter()->startElement('currencies');
-        }
-
-        $writer = $this->getWriter();
-
-        $writer->startElement('currency');
-
-        $writer->writeAttribute('id', (string)$id);
-        $writer->writeAttribute('rate', (string)$rate);
-
-        $writer->endElement();
-    }
-
     public function addCategory(int $id, string $name, int $parentId): void
     {
-        if ($this->progress === self::PROGRESS_CURRENCIES) {
+        if ($this->progress === self::PROGRESS_STARTED) {
             $this->progress = self::PROGRESS_CATEGORIES;
             $this->getWriter()->endElement();
             $this->getWriter()->startElement('categories');
@@ -137,16 +118,6 @@ class YmlWriter
     public function getCompany(): string
     {
         return $this->company;
-    }
-
-    public function setCurrencies($currencies): void
-    {
-        $this->currencies = $currencies;
-    }
-
-    public function getCurrencies(): array
-    {
-        return $this->currencies;
     }
 
     public function setLocalDeliveryCost(string $localDeliveryCost): void
