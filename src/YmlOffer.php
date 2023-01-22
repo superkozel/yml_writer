@@ -78,14 +78,13 @@ class YmlOffer implements YmlOfferWriterInterface
         $writer->writeCdata($this->description);
         $writer->endElement();
         $writer->writeElement('url', $this->url);
-        $writer->writeElement('store', $this->boolVal($this->store));
         if ($this->getPrice() > 0) {
             $writer->writeElement('price', $this->moneyFormat($this->price));
             if ($this->getOldPrice() > 0) {
                 $writer->writeElement('oldprice', $this->moneyFormat($this->oldPrice));
             }
         }
-        $writer->writeElement('currencyId', (string)$this->currencyId);
+        $writer->writeElement('currencyId', $this->currencyId);
         $writer->writeElementOptional('vat', $this->vat?->name);
         $writer->writeElement('categoryId', (string)$this->categoryId);
         $writer->writeElement('picture', $this->picture);
