@@ -15,7 +15,7 @@ class YmlOffer implements YmlOfferWriterInterface
     protected string $url;
     protected int|float $price;
     protected int|float $oldPrice;
-    protected int $currencyId;
+    protected string $currencyId;
     protected ?YmlOfferVAT $vat;
     protected bool $available;
     protected bool $disabled = false;
@@ -132,7 +132,7 @@ class YmlOffer implements YmlOfferWriterInterface
 
     protected function moneyFormat(int|float $value): string
     {
-        return str_replace('.', ',', (string)round($value, 2));
+        return number_format(round($value, 2), 2, ',', '');
     }
 
 
@@ -205,7 +205,7 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this->cpa;
     }
 
-    public function setCurrencyId(int $currencyId): static
+    public function setCurrencyId(string $currencyId): static
     {
         $this->currencyId = $currencyId;
 
