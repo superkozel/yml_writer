@@ -78,7 +78,7 @@ class YmlOffer implements YmlOfferWriterInterface
         $writer->writeElement('url', $this->url);
         if ($this->getPrice() > 0) {
             $writer->writeElement('price', $this->moneyFormat($this->price));
-            if ($this->oldPrice !== null && $this->oldPrice > 0) {
+            if ($this->oldPrice !== null && $this->oldPrice > 0 && $this->oldPrice < $this->price) {
                 $writer->writeElement('oldprice', $this->moneyFormat($this->oldPrice));
             }
         }

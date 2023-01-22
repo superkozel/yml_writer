@@ -1503,12 +1503,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7919c63ba40aeb032c15c99d97bfbfa1568a0e75"
+                "reference": "2a89c3c62c4d94fa92b72cb3693ca4fa057e4517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7919c63ba40aeb032c15c99d97bfbfa1568a0e75",
-                "reference": "7919c63ba40aeb032c15c99d97bfbfa1568a0e75",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2a89c3c62c4d94fa92b72cb3693ca4fa057e4517",
+                "reference": "2a89c3c62c4d94fa92b72cb3693ca4fa057e4517",
                 "shasum": ""
             },
             "require": {
@@ -1596,7 +1596,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-20T15:06:24+00:00"
+            "time": "2023-01-22T06:40:23+00:00"
         },
         {
             "name": "psr/container",
@@ -3479,12 +3479,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "9725dafb7e0e0693cd8eee14d83d48db2cef39cd"
+                "reference": "29b654e3e5d59c0fb5cc008d9a24026f1fd8592d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/9725dafb7e0e0693cd8eee14d83d48db2cef39cd",
-                "reference": "9725dafb7e0e0693cd8eee14d83d48db2cef39cd",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/29b654e3e5d59c0fb5cc008d9a24026f1fd8592d",
+                "reference": "29b654e3e5d59c0fb5cc008d9a24026f1fd8592d",
                 "shasum": ""
             },
             "require": {
@@ -3576,7 +3576,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm/tree/master"
             },
-            "time": "2023-01-21T11:21:27+00:00"
+            "time": "2023-01-22T14:19:36+00:00"
         },
         {
             "name": "webmozart/assert",
