@@ -18,12 +18,12 @@ class YmlWriter
     protected ?string $agency = null;
     protected ?string $email = null;
     protected ?string $localDeliveryCost = null;
-    protected XmlWriter $writer;
+    protected YmlXmlWriter $writer;
     protected int $progress;
 
     public function __construct()
     {
-        $this->writer = new XmlWriter();
+        $this->writer = new YmlXmlWriter();
         $this->progress = static::PROGRESS_NONE;
     }
 
@@ -34,7 +34,7 @@ class YmlWriter
 
     public function start(): void
     {
-        $writer = new XmlWriter();
+        $writer = new YmlXmlWriter();
 
         $this->setWriter($writer);
 
@@ -156,12 +156,12 @@ class YmlWriter
         return $this->url;
     }
 
-    public function setWriter(XmlWriter $writer): void
+    public function setWriter(YmlXmlWriter $writer): void
     {
         $this->writer = $writer;
     }
 
-    public function getWriter(): XmlWriter
+    public function getWriter(): YmlXmlWriter
     {
         return $this->writer;
     }

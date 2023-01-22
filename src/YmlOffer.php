@@ -14,49 +14,47 @@ class YmlOffer implements YmlOfferWriterInterface
     protected int $id;
     protected string $url;
     protected int|float $price;
-    protected int|float $oldPrice;
+    protected int|float|null $oldPrice = null;
     protected string $currencyId;
-    protected ?YmlOfferVAT $vat;
+    protected ?YmlOfferVAT $vat = null;
     protected bool $available;
     protected bool $disabled = false;
-    protected ?int $count;
-    protected ?int $minQuantity;
-    protected ?int $stepQuantity;
+    protected ?int $count = null;
+    protected ?int $minQuantity = null;
+    protected ?int $stepQuantity = null;
     protected int $categoryId;
-    protected ?string $marketCategory;
+    protected ?string $marketCategory = null;
     protected string $picture;
-    protected ?bool $delivery;
-    protected bool $store;
-    protected ?bool $pickup;
+    protected ?bool $delivery = null;
+    protected ?bool $store = null;
+    protected ?bool $pickup = null;
     protected float $localDeliveryCost;
     protected string $name;
     protected string $vendor;
-    protected ?string $vendorCode;
+    protected ?string $vendorCode = null;
     protected string $description;
-    protected ?string $salesNotes;
-    protected ?string $countryOfOrigin;
-    protected ?string $barcode;
-    protected ?string $dimensions;
-    protected bool $cpa;
-
-    protected ?YmlOfferType $type;
-    protected ?bool $adult;
-    protected ?bool $downloadable;
-    protected ?DateInterval $periodOfValidityDays;
-    protected ?string $commentValidityDays;
-    protected ?DateInterval $serviceLifeDays;
-    protected ?string $commentLifeDays;
-    protected ?DateInterval $warrantyDays;
-    protected ?string $commentWarranty;
-    protected ?bool $manufacturerWarranty;
-    protected ?string $certificate;
-    protected ?string $tnVedCode;
-    protected ?YmlOfferConditionType $conditionType;
-    protected ?YmlOfferConditionQuality $conditionQuality;
-    protected ?string $conditionReason;
-    protected ?YmlOfferAgeUnit $ageUnit;
-    protected ?int $age;
-    protected ?int $boxCount;
+    protected ?string $salesNotes = null;
+    protected ?string $countryOfOrigin = null;
+    protected ?string $barcode = null;
+    protected ?string $dimensions = null;
+    protected ?YmlOfferType $type = null;
+    protected ?bool $adult = null;
+    protected ?bool $downloadable = null;
+    protected ?DateInterval $periodOfValidityDays = null;
+    protected ?string $commentValidityDays = null;
+    protected ?DateInterval $serviceLifeDays = null;
+    protected ?string $commentLifeDays = null;
+    protected ?DateInterval $warrantyDays = null;
+    protected ?string $commentWarranty = null;
+    protected ?bool $manufacturerWarranty = null;
+    protected ?string $certificate = null;
+    protected ?string $tnVedCode = null;
+    protected ?YmlOfferConditionType $conditionType = null;
+    protected ?YmlOfferConditionQuality $conditionQuality = null;
+    protected ?string $conditionReason = null;
+    protected ?YmlOfferAgeUnit $ageUnit = null;
+    protected ?int $age = null;
+    protected ?int $boxCount = null;
     protected array $params = [];
 
     public static function create(): static
@@ -64,7 +62,7 @@ class YmlOffer implements YmlOfferWriterInterface
         return new static();
     }
 
-    public function write(XmlWriter $writer): void
+    public function write(YmlXmlWriter $writer): void
     {
         $writer->startElement('offer');
 
@@ -80,7 +78,7 @@ class YmlOffer implements YmlOfferWriterInterface
         $writer->writeElement('url', $this->url);
         if ($this->getPrice() > 0) {
             $writer->writeElement('price', $this->moneyFormat($this->price));
-            if ($this->getOldPrice() > 0) {
+            if ($this->oldPrice !== null && $this->oldPrice > 0) {
                 $writer->writeElement('oldprice', $this->moneyFormat($this->oldPrice));
             }
         }
@@ -118,11 +116,9 @@ class YmlOffer implements YmlOfferWriterInterface
         $writer->writeElementOptional('store', $this->boolVal($this->store));
         $writer->writeElementOptional('pickup', $this->boolVal($this->pickup));
         $writer->writeElementOptional('delivery', $this->boolVal($this->delivery));
-        $writer->writeElementOptional('local_delivery_cost', $this->moneyFormat($this->localDeliveryCost));
         $writer->writeElementOptional('sales_notes', $this->salesNotes);
         $writer->writeElementOptional('country_of_origin', $this->countryOfOrigin);
         $writer->writeElementOptional('barcode', $this->barcode);
-        $writer->writeElementOptional('cpa', $this->cpa);
         $writer->writeElementOptional('dimension', $this->dimensions);
         $writer->writeElementOptional('manufacturer_warranty', $this->boolVal($this->manufacturerWarranty));
 
@@ -192,18 +188,6 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this->countryOfOrigin;
     }
 
-    public function setCpa(bool $cpa): static
-    {
-        $this->cpa = $cpa;
-
-        return $this;
-    }
-
-    public function getCpa(): bool
-    {
-        return $this->cpa;
-    }
-
     public function setCurrencyId(string $currencyId): static
     {
         $this->currencyId = $currencyId;
@@ -211,7 +195,7 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this;
     }
 
-    public function getCurrencyId(): int
+    public function getCurrencyId(): string
     {
         return $this->currencyId;
     }
@@ -250,18 +234,6 @@ class YmlOffer implements YmlOfferWriterInterface
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setLocalDeliveryCost($localDeliveryCost): static
-    {
-        $this->localDeliveryCost = $localDeliveryCost;
-
-        return $this;
-    }
-
-    public function getLocalDeliveryCost(): float
-    {
-        return $this->localDeliveryCost;
     }
 
     public function setManufacturerWarranty(bool $manufacturerWarranty): static
@@ -355,7 +327,7 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this;
     }
 
-    public function getStore(): bool
+    public function getStore(): ?bool
     {
         return $this->store;
     }
@@ -396,7 +368,7 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this->vendorCode;
     }
 
-    public function getOldPrice(): float|int
+    public function getOldPrice(): float|int|null
     {
         return $this->oldPrice;
     }

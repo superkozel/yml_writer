@@ -2,7 +2,7 @@
 
 namespace Superkozel\YmlWriter;
 
-class XmlWriter extends \XMLWriter
+class YmlXmlWriter extends \XMLWriter
 {
     public function writeElementOptional(string $name, mixed $value): void
     {
