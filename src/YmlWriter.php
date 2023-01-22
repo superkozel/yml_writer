@@ -64,7 +64,7 @@ class YmlWriter
         $this->progress = self::PROGRESS_STARTED;
     }
 
-    public function addCategory(int $id, string $name, int $parentId): void
+    public function addCategory(int $id, string $name, ?int $parentId): void
     {
         if ($this->progress === self::PROGRESS_STARTED) {
             $this->progress = self::PROGRESS_CATEGORIES;
@@ -73,13 +73,10 @@ class YmlWriter
         }
 
         $this->getWriter()->startElement('category');
-
         $this->getWriter()->writeAttribute('id', (string)$id);
-
-        if ($parentId) {
+        if ($parentId !== null) {
             $this->getWriter()->writeAttribute('parentId', (string)$parentId);
         }
-
         $this->getWriter()->text($name);
 
         $this->getWriter()->endElement();
