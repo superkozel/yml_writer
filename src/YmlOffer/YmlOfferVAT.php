@@ -1,6 +1,6 @@
 <?php
 
-namespace Superkozel\YmlOffer;
+namespace Superkozel\YmlWriter\YmlOffer;
 
 
 //НДС не облагается — 6 или NO_VAT

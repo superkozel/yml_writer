@@ -1,6 +1,6 @@
 <?php
 
-namespace Superkozel\YmlOffer;
+namespace Superkozel\YmlWriter\YmlOffer;
 
 //    audiobook — аудиокнига;
 //    book — книга;

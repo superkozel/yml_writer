@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Superkozel;
+namespace Superkozel\YmlWriter;
 
 use XMLWriter;
 

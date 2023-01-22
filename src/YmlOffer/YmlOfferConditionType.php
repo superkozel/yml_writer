@@ -1,6 +1,6 @@
 <?php
 
-namespace Superkozel\YmlOffer;
+namespace Superkozel\YmlWriter\YmlOffer;
 
 //preowned — бывший в употреблении, раньше принадлежал другому человеку.
 //showcasesample — витринный образец.

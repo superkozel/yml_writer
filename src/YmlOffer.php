@@ -1,13 +1,13 @@
 <?php
 
-namespace Superkozel;
+namespace Superkozel\YmlWriter;
 
 use DateInterval;
-use Superkozel\YmlOffer\YmlOfferAgeUnit;
-use Superkozel\YmlOffer\YmlOfferConditionQuality;
-use Superkozel\YmlOffer\YmlOfferConditionType;
-use Superkozel\YmlOffer\YmlOfferType;
-use Superkozel\YmlOffer\YmlOfferVAT;
+use Superkozel\YmlWriter\YmlOffer\YmlOfferAgeUnit;
+use Superkozel\YmlWriter\YmlOffer\YmlOfferConditionQuality;
+use Superkozel\YmlWriter\YmlOffer\YmlOfferConditionType;
+use Superkozel\YmlWriter\YmlOffer\YmlOfferType;
+use Superkozel\YmlWriter\YmlOffer\YmlOfferVAT;
 use XMLWriter;
 
 class YmlOffer implements YmlOfferWriterInterface
