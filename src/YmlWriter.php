@@ -2,9 +2,6 @@
 
 namespace Superkozel\YmlWriter;
 
-
-use XMLWriter;
-
 class YmlWriter
 {
     final const PROGRESS_NONE = 0;
@@ -14,26 +11,57 @@ class YmlWriter
     final const PROGRESS_FINISHED = 4;
 
     protected string $path;
-
     protected string $name;
     protected string $company;
     protected string $url;
-    protected ?string $platform;
-    protected ?string $agency;
-    protected ?string $email;
+    protected ?string $platform = null;
+    protected ?string $agency = null;
+    protected ?string $email = null;
     protected ?string $localDeliveryCost = null;
-    protected XMLWriter $writer;
+    protected XmlWriter $writer;
     protected int $progress;
 
     public function __construct()
     {
-        $this->writer = new XMLWriter();
+        $this->writer = new XmlWriter();
         $this->progress = static::PROGRESS_NONE;
     }
 
     public static function create(): static
     {
         return new static();
+    }
+
+    public function start(): void
+    {
+        $writer = new XmlWriter();
+
+        $this->setWriter($writer);
+
+//        $writer->openURI($this->getPath());
+        $writer->openMemory();
+
+        $writer->startDocument('1.0', 'utf-8');
+
+        $writer->startDtd('yml_catalog', 'shops.dtd', 'shops.dtd');
+        $writer->endDtd();
+
+        $writer->setIndent(true);
+        $writer->startElement('yml_catalog');
+
+        $writer->writeAttribute('date', date('Y-m-d H:i'));
+
+        $writer->startElement('shop');
+
+        $writer->writeElement('name', $this->name);
+        $writer->writeElement('company', $this->company);
+        $writer->writeElement('url', $this->url);
+        $writer->writeElementOptional('local_delivery_cost', $this->localDeliveryCost);
+        $writer->writeElementOptional('agency', $this->agency);
+        $writer->writeElementOptional('platform', $this->platform);
+        $writer->writeElementOptional('email', $this->email);
+
+        $this->progress = self::PROGRESS_STARTED;
     }
 
     public function addCategory(int $id, string $name, int $parentId): void
@@ -68,35 +96,6 @@ class YmlWriter
         }
 
         $offer->write($writer);
-    }
-
-    public function start(): void
-    {
-        $writer = new XMLWriter();
-
-        $this->setWriter($writer);
-
-//        $writer->openURI($this->getPath());
-        $writer->openMemory();
-
-        $writer->startDocument('1.0', 'utf-8');
-
-        $writer->startDtd('yml_catalog', 'shops.dtd', 'shops.dtd');
-        $writer->endDtd();
-
-        $writer->setIndent(true);
-        $writer->startElement('yml_catalog');
-
-        $writer->writeAttribute('date', date('Y-m-d H:i'));
-
-        $writer->startElement('shop');
-
-        $writer->writeElement('name', $this->getName());
-        $writer->writeElement('company', $this->getCompany());
-        $writer->writeElement('url', $this->getUrl());
-        $writer->writeElement('local_delivery_cost', $this->getLocalDeliveryCost());
-
-        $this->progress = self::PROGRESS_STARTED;
     }
 
     public function finish(): string
@@ -160,12 +159,12 @@ class YmlWriter
         return $this->url;
     }
 
-    public function setWriter(XMLWriter $writer): void
+    public function setWriter(XmlWriter $writer): void
     {
         $this->writer = $writer;
     }
 
-    public function getWriter(): XMLWriter
+    public function getWriter(): XmlWriter
     {
         return $this->writer;
     }

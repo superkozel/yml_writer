@@ -8,7 +8,6 @@ use Superkozel\YmlWriter\YmlOffer\YmlOfferConditionQuality;
 use Superkozel\YmlWriter\YmlOffer\YmlOfferConditionType;
 use Superkozel\YmlWriter\YmlOffer\YmlOfferType;
 use Superkozel\YmlWriter\YmlOffer\YmlOfferVAT;
-use XMLWriter;
 
 class YmlOffer implements YmlOfferWriterInterface
 {
@@ -65,12 +64,12 @@ class YmlOffer implements YmlOfferWriterInterface
         return new static();
     }
 
-    public function write(XMLWriter $writer): void
+    public function write(XmlWriter $writer): void
     {
         $writer->startElement('offer');
 
         $writer->writeAttribute('id', (string)$this->id);
-        $this->writeElementOptional('available', $this->boolVal($this->available), $writer);
+        $writer->writeElementOptional('available', $this->boolVal($this->available));
         if ($this->disabled === true) {
             $writer->writeElement('disabled', $this->boolVal($this->disabled));
         }
@@ -87,11 +86,11 @@ class YmlOffer implements YmlOfferWriterInterface
             }
         }
         $writer->writeElement('currencyId', (string)$this->currencyId);
-        $this->writeElementOptional('vat', $this->vat?->name, $writer);
+        $writer->writeElementOptional('vat', $this->vat?->name);
         $writer->writeElement('categoryId', (string)$this->categoryId);
         $writer->writeElement('picture', $this->picture);
         $writer->writeElement('vendor', $this->vendor);
-        $this->writeElementOptional('vendorCode', $this->vendorCode, $writer);
+        $writer->writeElementOptional('vendorCode', $this->vendorCode);
         foreach ($this->params as $name => $param) {
             [$value, $unit] = $param;
             $writer->startElement($name);
@@ -105,8 +104,8 @@ class YmlOffer implements YmlOfferWriterInterface
         if ($this->conditionType !== null) {
             $writer->startElement('condition');
             $writer->writeAttribute('type', $this->conditionType->value);
-            $this->writeElementOptional('quality', $this->conditionQuality?->value, $writer);
-            $this->writeElementOptional('reason', $this->conditionReason, $writer);
+            $writer->writeElementOptional('quality', $this->conditionQuality?->value);
+            $writer->writeElementOptional('reason', $this->conditionReason);
             $writer->endElement();
         }
 
@@ -116,17 +115,17 @@ class YmlOffer implements YmlOfferWriterInterface
             $writer->text((string)$this->age);
             $writer->endElement();
         }
-        $this->writeElementOptional('box-count', $this->boxCount, $writer);
-        $this->writeElementOptional('store', $this->boolVal($this->store), $writer);
-        $this->writeElementOptional('pickup', $this->boolVal($this->pickup), $writer);
-        $this->writeElementOptional('delivery', $this->boolVal($this->delivery), $writer);
-        $this->writeElementOptional('local_delivery_cost', $this->moneyFormat($this->localDeliveryCost), $writer);
-        $this->writeElementOptional('sales_notes', $this->salesNotes, $writer);
-        $this->writeElementOptional('country_of_origin', $this->countryOfOrigin, $writer);
-        $this->writeElementOptional('barcode', $this->barcode, $writer);
-        $this->writeElementOptional('cpa', $this->cpa, $writer);
-        $this->writeElementOptional('dimension', $this->dimensions, $writer);
-        $this->writeElementOptional('manufacturer_warranty', $this->boolVal($this->manufacturerWarranty), $writer);
+        $writer->writeElementOptional('box-count', $this->boxCount);
+        $writer->writeElementOptional('store', $this->boolVal($this->store));
+        $writer->writeElementOptional('pickup', $this->boolVal($this->pickup));
+        $writer->writeElementOptional('delivery', $this->boolVal($this->delivery));
+        $writer->writeElementOptional('local_delivery_cost', $this->moneyFormat($this->localDeliveryCost));
+        $writer->writeElementOptional('sales_notes', $this->salesNotes);
+        $writer->writeElementOptional('country_of_origin', $this->countryOfOrigin);
+        $writer->writeElementOptional('barcode', $this->barcode);
+        $writer->writeElementOptional('cpa', $this->cpa);
+        $writer->writeElementOptional('dimension', $this->dimensions);
+        $writer->writeElementOptional('manufacturer_warranty', $this->boolVal($this->manufacturerWarranty));
 
         $writer->endElement();
     }
@@ -134,15 +133,6 @@ class YmlOffer implements YmlOfferWriterInterface
     protected function moneyFormat(int|float $value): string
     {
         return str_replace('.', ',', (string)round($value, 2));
-    }
-
-    protected function writeElementOptional(string $name, mixed $value, XMLWriter $writer): void
-    {
-        if ($value === null) {
-            return;
-        }
-
-        $writer->writeElement($name, $value);
     }
 
 
