@@ -79,7 +79,6 @@ class YmlWriter
     {
         if ($this->progress === self::PROGRESS_STARTED) {
             $this->progress = self::PROGRESS_CATEGORIES;
-            $this->getWriter()->endElement();
             $this->getWriter()->startElement('categories');
         }
 
