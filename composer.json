@@ -1,25 +1,27 @@
 {
-    "name": "superkozel/yml_writer",
-    "description": "Yandex Market Language document writer",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Superkozel\\YmlWriter\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Dmitriy Zykov",
-            "email": "aesleep@ya.ru"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-      "ext-xmlwriter": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "10.0.x-dev",
-        "vimeo/psalm": "5.x-dev"
+  "name": "superkozel/yml_writer",
+  "description": "Yandex Market Language document writer",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Superkozel\\YmlWriter\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Dmitriy Zykov",
+      "email": "aesleep@ya.ru"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": "^8.1",
+    "ext-xmlwriter": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "10.0.x-dev",
+    "vimeo/psalm": "5.x-dev"
+  }
 }
