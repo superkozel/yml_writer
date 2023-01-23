@@ -98,7 +98,9 @@ class YmlWriter
 
         if ($this->progress === self::PROGRESS_CATEGORIES) {
             $writer->endElement();
-            $writer->flush();
+            if ($this->mode === self::MODE_FILE) {
+                $writer->flush();
+            }
             $writer->startElement('offers');
             $this->progress = self::PROGRESS_OFFERS;
         }
