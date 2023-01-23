@@ -21,7 +21,7 @@
     "ext-xmlwriter": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "10.0.x-dev",
-    "vimeo/psalm": "5.x-dev"
+    "phpunit/phpunit": "^9.5",
+    "vimeo/psalm": "^5.4"
   }
 }
