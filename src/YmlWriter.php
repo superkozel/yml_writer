@@ -11,7 +11,7 @@ class YmlWriter
     protected final const PROGRESS_FINISHED = 4;
 
     final const MODE_MEMORY = 1;
-    final const MODE_FILE = 1;
+    final const MODE_FILE = 2;
 
     protected ?string $path = null;
     protected string $name;
