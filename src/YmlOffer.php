@@ -11,9 +11,10 @@ use Superkozel\YmlWriter\YmlOffer\YmlOfferVAT;
 
 class YmlOffer implements YmlOfferWriterInterface
 {
-    protected int $id;
+    protected int|string $id;
     protected string $url;
-    protected int|float $price;
+    protected string $picture;
+    protected int|float|null $price;
     protected int|float|null $oldPrice = null;
     protected string $currencyId;
     protected ?YmlOfferVAT $vat = null;
@@ -23,12 +24,9 @@ class YmlOffer implements YmlOfferWriterInterface
     protected ?int $minQuantity = null;
     protected ?int $stepQuantity = null;
     protected int $categoryId;
-    protected ?string $marketCategory = null;
-    protected string $picture;
     protected ?bool $delivery = null;
     protected ?bool $store = null;
     protected ?bool $pickup = null;
-    protected float $localDeliveryCost;
     protected string $name;
     protected string $vendor;
     protected ?string $vendorCode = null;
@@ -78,7 +76,7 @@ class YmlOffer implements YmlOfferWriterInterface
         $writer->writeElement('url', $this->url);
         if ($this->getPrice() > 0) {
             $writer->writeElement('price', $this->moneyFormat($this->price));
-            if ($this->oldPrice !== null && $this->oldPrice > 0 && $this->oldPrice < $this->price) {
+            if ($this->oldPrice !== null && $this->oldPrice > 0) {
                 $writer->writeElement('oldprice', $this->moneyFormat($this->oldPrice));
             }
         }
@@ -90,7 +88,8 @@ class YmlOffer implements YmlOfferWriterInterface
         $writer->writeElementOptional('vendorCode', $this->vendorCode);
         foreach ($this->params as $name => $param) {
             [$value, $unit] = $param;
-            $writer->startElement($name);
+            $writer->startElement('param');
+            $writer->writeAttribute('name', $name);
             if (!is_null($unit)) {
                 $writer->writeAttribute('unit', $unit);
             }
@@ -119,7 +118,15 @@ class YmlOffer implements YmlOfferWriterInterface
         $writer->writeElementOptional('sales_notes', $this->salesNotes);
         $writer->writeElementOptional('country_of_origin', $this->countryOfOrigin);
         $writer->writeElementOptional('barcode', $this->barcode);
+        $writer->writeElementOptional('tn-ved-code', $this->tnVedCode);
+        $writer->writeElementOptional('certificate', $this->certificate);
         $writer->writeElementOptional('dimension', $this->dimensions);
+        $writer->writeElementOptional('period-of-validity-days', $this->dateIntervalToDaysString($this->periodOfValidityDays));
+        $writer->writeElementOptional('comment-validity-days', $this->commentValidityDays);
+        $writer->writeElementOptional('service-life-days', $this->dateIntervalToDaysString($this->serviceLifeDays));
+        $writer->writeElementOptional('comment-life-days', $this->commentLifeDays);
+        $writer->writeElementOptional('warranty-days', $this->dateIntervalToDaysString($this->warrantyDays));
+        $writer->writeElementOptional('comment-warranty', $this->commentWarranty);
         $writer->writeElementOptional('manufacturer_warranty', $this->boolVal($this->manufacturerWarranty));
 
         $writer->endElement();
@@ -138,6 +145,27 @@ class YmlOffer implements YmlOfferWriterInterface
         }
 
         return $val ? 'true' : 'false';
+    }
+
+    protected function dateIntervalToDaysString(?DateInterval $interval): ?string
+    {
+        if ($interval === null) {
+            return null;
+        }
+
+        $date = array_filter([
+            'Y' => $interval->y,
+            'M' => $interval->m,
+            'D' => $interval->d,
+        ]);
+
+        $specString = 'P';
+
+        foreach ($date as $key => $value) {
+            $specString .= $value.$key;
+        }
+
+        return $specString;
     }
 
     public function setAvailable(bool $available): static
@@ -224,14 +252,14 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this->description;
     }
 
-    public function setId(int $id): static
+    public function setId(int|string $id): static
     {
         $this->id = $id;
 
         return $this;
     }
 
-    public function getId(): int
+    public function getId(): int|string
     {
         return $this->id;
     }
@@ -246,18 +274,6 @@ class YmlOffer implements YmlOfferWriterInterface
     public function getManufacturerWarranty(): ?bool
     {
         return $this->manufacturerWarranty;
-    }
-
-    public function setMarketCategory(string $marketCategory): static
-    {
-        $this->marketCategory = $marketCategory;
-
-        return $this;
-    }
-
-    public function getMarketCategory(): ?string
-    {
-        return $this->marketCategory;
     }
 
     public function setName(string $name): static
@@ -296,14 +312,14 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this->picture;
     }
 
-    public function setPrice(int|float $price): static
+    public function setPrice(int|float|null $price): static
     {
         $this->price = $price;
 
         return $this;
     }
 
-    public function getPrice(): float
+    public function getPrice(): int|float|null
     {
         return $this->price;
     }
@@ -373,7 +389,7 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this->oldPrice;
     }
 
-    public function setOldPrice(float|int $oldPrice): static
+    public function setOldPrice(float|int|null $oldPrice): static
     {
         $this->oldPrice = $oldPrice;
 
@@ -560,17 +576,11 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCertificate(): ?string
     {
         return $this->certificate;
     }
 
-    /**
-     * @param string|null $certificate
-     */
     public function setCertificate(?string $certificate): static
     {
         $this->certificate = $certificate;
@@ -578,17 +588,11 @@ class YmlOffer implements YmlOfferWriterInterface
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTnVedCode(): ?string
     {
         return $this->tnVedCode;
     }
 
-    /**
-     * @param string|null $tnVedCode
-     */
     public function setTnVedCode(?string $tnVedCode): static
     {
         $this->tnVedCode = $tnVedCode;
@@ -658,7 +662,7 @@ class YmlOffer implements YmlOfferWriterInterface
 
     public function addParam(string $name, string $value, ?string $unit): static
     {
-        $this->params[] = [$value, $unit];
+        $this->params[$name] = [$value, $unit];
 
         return $this;
     }
