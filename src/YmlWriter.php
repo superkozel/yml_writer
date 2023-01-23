@@ -4,13 +4,16 @@ namespace Superkozel\YmlWriter;
 
 class YmlWriter
 {
-    final const PROGRESS_NONE = 0;
-    final const PROGRESS_STARTED = 1;
-    final const PROGRESS_CATEGORIES = 2;
-    final const PROGRESS_OFFERS = 3;
-    final const PROGRESS_FINISHED = 4;
+    protected final const PROGRESS_NONE = 0;
+    protected final const PROGRESS_STARTED = 1;
+    protected final const PROGRESS_CATEGORIES = 2;
+    protected final const PROGRESS_OFFERS = 3;
+    protected final const PROGRESS_FINISHED = 4;
 
-    protected string $path;
+    final const MODE_MEMORY = 1;
+    final const MODE_FILE = 1;
+
+    protected ?string $path = null;
     protected string $name;
     protected string $company;
     protected string $url;
@@ -20,11 +23,14 @@ class YmlWriter
     protected ?string $localDeliveryCost = null;
     protected YmlXmlWriter $writer;
     protected int $progress;
+    protected int $mode;
+    protected int $offerCounter;
 
     public function __construct()
     {
         $this->writer = new YmlXmlWriter();
         $this->progress = static::PROGRESS_NONE;
+        $this->offerCounter = 0;
     }
 
     public static function create(): static
@@ -38,8 +44,13 @@ class YmlWriter
 
         $this->setWriter($writer);
 
-//        $writer->openURI($this->getPath());
-        $writer->openMemory();
+        if ($this->path !== null) {
+            $writer->openURI($this->path);
+            $this->mode = self::MODE_FILE;
+        } else {
+            $writer->openMemory();
+            $this->mode = self::MODE_MEMORY;
+        }
 
         $writer->startDocument('1.0', 'utf-8');
 
@@ -88,22 +99,34 @@ class YmlWriter
 
         if ($this->progress === self::PROGRESS_CATEGORIES) {
             $writer->endElement();
+            $writer->flush();
             $writer->startElement('offers');
             $this->progress = self::PROGRESS_OFFERS;
+        }
+
+        ++$this->offerCounter;
+
+        if ($this->mode === self::MODE_FILE && $this->offerCounter % 200 === 0) {
+            $writer->flush();
         }
 
         $offer->write($writer);
     }
 
-    public function finish(): string
+    public function finish(): ?string
     {
         $writer = $this->getWriter();
 
-        $writer->endElement();
-        $writer->endElement();
-        $writer->endElement();
+        $writer->endDocument();
+        $this->progress = self::PROGRESS_FINISHED;
 
-        return $writer->outputMemory();
+        if ($this->mode === self::MODE_MEMORY) {
+            return $writer->outputMemory();
+        }
+
+        $writer->flush();
+
+        return null;
     }
 
     public function setCompany(string $company): void
@@ -141,7 +164,7 @@ class YmlWriter
         $this->path = $path;
     }
 
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
