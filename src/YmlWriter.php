@@ -11,7 +11,7 @@ class YmlWriter
     protected final const PROGRESS_FINISHED = 4;
 
     final const MODE_MEMORY = 1;
-    final const MODE_FILE = 2;
+    final const MODE_FILE = 1;
 
     protected ?string $path = null;
     protected string $name;
@@ -52,12 +52,12 @@ class YmlWriter
             $this->mode = self::MODE_MEMORY;
         }
 
+        $writer->setIndent(true);
         $writer->startDocument('1.0', 'utf-8');
 
-        $writer->startDtd('yml_catalog', 'shops.dtd', 'shops.dtd');
+//        $writer->startDtd('yml_catalog', 'shops.dtd', 'shops.dtd');
         $writer->endDtd();
 
-        $writer->setIndent(true);
         $writer->startElement('yml_catalog');
 
         $writer->writeAttribute('date', date('Y-m-d H:i'));
@@ -98,9 +98,7 @@ class YmlWriter
 
         if ($this->progress === self::PROGRESS_CATEGORIES) {
             $writer->endElement();
-            if ($this->mode === self::MODE_FILE) {
-                $writer->flush();
-            }
+            $writer->flush();
             $writer->startElement('offers');
             $this->progress = self::PROGRESS_OFFERS;
         }
