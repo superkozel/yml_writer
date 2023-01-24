@@ -134,6 +134,10 @@ class YmlOffer implements YmlOfferWriterInterface
 
     protected function moneyFormat(int|float $value): string
     {
+        if (is_int($value)) {
+            return (string)$value;
+        }
+
         return number_format(round($value, 2), 2, ',', '');
     }
 
