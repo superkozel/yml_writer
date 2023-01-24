@@ -65,7 +65,7 @@ class YmlOffer implements YmlOfferWriterInterface
         $writer->startElement('offer');
 
         $writer->writeAttribute('id', (string)$this->id);
-        $writer->writeElementOptional('available', $this->boolVal($this->available));
+//        $writer->writeElementOptional('available', $this->boolVal($this->available));//почему-то товарная выгрузка не хчоет
         if ($this->disabled === true) {
             $writer->writeElement('disabled', $this->boolVal($this->disabled));
         }
